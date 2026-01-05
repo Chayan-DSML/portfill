@@ -336,6 +336,40 @@ const AvionicsHeader = () => (
 );
 
 /* =========================
+   COMPONENTS
+========================= */
+
+const FilterDropdown = ({ options, value, onChange, icon: Icon }) => {
+    const [isOpen, setIsOpen] = useState(false);
+
+    return (
+        <div className="relative">
+            <button
+                onClick={() => setIsOpen(!isOpen)}
+                className="flex items-center justify-between gap-2 bg-cyan-900/20 border border-cyan-800/50 text-cyan-400 px-3 py-1 text-[10px] uppercase tracking-wider hover:bg-cyan-900/40 transition-colors min-w-[140px]"
+            >
+                <div className="flex items-center gap-2"><Icon size={10} /> {value}</div>
+                <ChevronRight size={10} className={`transition-transform duration-200 ${isOpen ? "rotate-90" : ""}`} />
+            </button>
+
+            {isOpen && (
+                <div className="absolute top-full left-0 mt-1 w-full bg-black border border-gray-700 z-50 max-h-60 overflow-y-auto shadow-xl shadow-black/80">
+                    {options.map((opt) => (
+                        <div
+                            key={opt}
+                            onClick={() => { onChange(opt); setIsOpen(false); }}
+                            className={`px-3 py-2 text-[10px] cursor-pointer hover:bg-cyan-900/20 transition-colors border-b border-gray-900 last:border-0 ${value === opt ? "text-cyan-400 font-bold bg-cyan-900/10" : "text-gray-500"}`}
+                        >
+                            {opt}
+                        </div>
+                    ))}
+                </div>
+            )}
+        </div>
+    );
+};
+
+/* =========================
    PAGES
 ========================= */
 
@@ -363,17 +397,7 @@ const MFDPage = ({ mode }) => {
         setStackFilter("ALL");
     }, [mode]);
 
-    const cycleCategory = () => {
-        const idx = categories.indexOf(categoryFilter);
-        const nextIdx = (idx + 1) % categories.length;
-        setCategoryFilter(categories[nextIdx]);
-    };
 
-    const cycleStack = () => {
-        const idx = techStacks.indexOf(stackFilter);
-        const nextIdx = (idx + 1) % techStacks.length;
-        setStackFilter(techStacks[nextIdx]);
-    };
 
     if (mode === "EXEC") {
         return (
@@ -470,18 +494,18 @@ const MFDPage = ({ mode }) => {
                             <div className="flex gap-2">
                                 {!activeProject && (
                                     <>
-                                        <button
-                                            onClick={cycleCategory}
-                                            className="flex items-center gap-2 bg-cyan-900/20 border border-cyan-800/50 text-cyan-400 px-3 py-1 text-[10px] uppercase tracking-wider hover:bg-cyan-900/40 transition-colors min-w-[140px] justify-center"
-                                        >
-                                            <Filter size={10} /> {categoryFilter}
-                                        </button>
-                                        <button
-                                            onClick={cycleStack}
-                                            className="flex items-center gap-2 bg-cyan-900/20 border border-cyan-800/50 text-cyan-400 px-3 py-1 text-[10px] uppercase tracking-wider hover:bg-cyan-900/40 transition-colors min-w-[100px] justify-center"
-                                        >
-                                            <Target size={10} /> {stackFilter}
-                                        </button>
+                                        <FilterDropdown
+                                            options={categories}
+                                            value={categoryFilter}
+                                            onChange={setCategoryFilter}
+                                            icon={Filter}
+                                        />
+                                        <FilterDropdown
+                                            options={techStacks}
+                                            value={stackFilter}
+                                            onChange={setStackFilter}
+                                            icon={Target}
+                                        />
                                     </>
                                 )}
                                 {activeProject && (
