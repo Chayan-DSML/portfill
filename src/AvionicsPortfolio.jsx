@@ -35,6 +35,49 @@ const data = {
             { id: "WIN-02", text: "REAL-TIME PROD MONITORING", sub: "GE AEROSPACE / TABLEAU" }
         ]
     },
+    report: {
+        posts: [
+            {
+                id: "RPT-001",
+                title: "AVIATION ANALYTICS 101",
+                date: "OCT 2025",
+                snippet: "Why predictive maintenance is the holy grail of airline operations cost reduction.",
+                content: `
+                    Predictive maintenance (PdM) represents the shift from "fail and fix" to "predict and prevent". 
+                    In aviation, an AOG (Aircraft on Ground) situation can cost upwards of $10,000 per hour. 
+                    
+                    By leveraging sensor data from high-bypass turbofan engines, we can build ML models (XGBoost/LSTM) 
+                    to predict component degradation before it hits a critical failure threshold.
+                    
+                    The key challenges involved are:
+                    1. Data Volume: Terabytes of sensor telemetry per flight.
+                    2. Noise: High vibration environments create noisy signal data.
+                    3. Imbalance: Actual failures are rare events compared to normal operations.
+                    
+                    Solving these unlocks millions in operational savings and improves safety margins significantly.
+                `
+            },
+            {
+                id: "RPT-002",
+                title: "GEN-AI IN COCKPIT?",
+                date: "DEC 2025",
+                snippet: "Exploring the feasibility of LLMs as co-pilots adjacent to standard EFB tools.",
+                content: `
+                    Large Language Models (LLMs) have shown reasoning capabilities that rival human experts in specific domains.
+                    Could an LLM serve as a "third pilot" in the cockpit?
+                    
+                    Electronic Flight Bags (EFBs) currently serve static data (manuals, charts). 
+                    An LLM-integrated EFB could answer complex queries like:
+                    "What are the diversion options given current fuel and wind conditions considering a hydraulic failure?"
+                    
+                    However, the hallucination problem remains a critical blocker. 
+                    In safety-critical avionics (DO-178C standards), non-deterministic outputs are a no-go.
+                    The future likely lies in RAG (Retrieval-Augmented Generation) systems grounded in verified flight manuals, 
+                    not open-ended generation.
+                `
+            }
+        ]
+    },
     system: {
         skills: ["PYTHON", "SQL", "TABLEAU", "AWS/GCP", "GEN-AI", "SCIKIT"],
         exp: [
@@ -640,6 +683,61 @@ const MFDPage = ({ mode }) => {
         );
     }
 
+    if (mode === "REPORT") {
+        const [activeReport, setActiveReport] = useState(null);
+
+        return (
+            <div className="p-6 h-full flex flex-col items-center">
+                {!activeReport ? (
+                    <div className="w-full max-w-4xl">
+                        <h2 className="text-3xl font-bold tracking-widest mb-8 text-white border-b border-gray-800 pb-4">
+                            <span className="text-cyan-500">MISSION REPORTS</span>
+                            <span className="text-gray-600 ml-3 text-lg">/ CLASSIFIED LOGS</span>
+                        </h2>
+
+                        <div className="grid gap-4">
+                            {data.report.posts.map(post => (
+                                <div
+                                    key={post.id}
+                                    onClick={() => setActiveReport(post)}
+                                    className="bg-gray-900/40 border border-gray-800 p-6 cursor-pointer hover:border-cyan-500 hover:bg-gray-900/60 transition-all group relative overflow-hidden"
+                                >
+                                    <div className="absolute top-0 right-0 p-2 opacity-50 font-mono text-xs text-gray-600">{post.id}</div>
+                                    <div className="flex justify-between items-end mb-2">
+                                        <h3 className="text-xl font-bold text-gray-200 group-hover:text-cyan-400 transition-colors uppercase tracking-wider">{post.title}</h3>
+                                        <span className="font-mono text-xs text-cyan-700">{post.date}</span>
+                                    </div>
+                                    <p className="text-gray-500 text-sm font-mono leading-relaxed max-w-2xl">{post.snippet}</p>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                ) : (
+                    <div className="w-full h-full flex flex-col max-w-3xl relative">
+                        <div className="mb-6 border-b border-gray-800 pb-4 flex justify-between items-center bg-black/90 sticky top-0 py-4 z-10">
+                            <div>
+                                <h1 className="text-2xl font-bold text-white tracking-widest uppercase mb-1">{activeReport.title}</h1>
+                                <div className="text-xs font-mono text-cyan-600">LOG DATE: {activeReport.date} // ID: {activeReport.id}</div>
+                            </div>
+                            <button
+                                onClick={() => setActiveReport(null)}
+                                className="flex items-center gap-2 bg-gray-900 text-gray-400 px-4 py-2 text-xs font-bold uppercase tracking-wider hover:bg-gray-800 hover:text-white transition-colors border border-gray-800"
+                            >
+                                <ArrowLeft size={12} /> CLOSE LOG
+                            </button>
+                        </div>
+
+                        <div className="flex-1 overflow-y-auto pr-4 text-justify">
+                            <div className="prose prose-invert prose-p:font-mono prose-p:text-sm prose-p:text-gray-400 prose-headings:font-bold prose-headings:tracking-widest max-w-none pb-20 whitespace-pre-line">
+                                {activeReport.content}
+                            </div>
+                        </div>
+                    </div>
+                )}
+            </div>
+        );
+    }
+
     return null;
 };
 
@@ -649,7 +747,7 @@ const MFDPage = ({ mode }) => {
 
 const NavPanel = ({ mode, setMode }) => (
     <div className="bg-black border-t border-gray-800 p-2 flex justify-center gap-2">
-        {["EXEC", "SYSTEM", "COMM"].map(m => (
+        {["EXEC", "SYSTEM", "REPORT", "COMM"].map(m => (
             <button
                 key={m}
                 onClick={() => setMode(m)}
