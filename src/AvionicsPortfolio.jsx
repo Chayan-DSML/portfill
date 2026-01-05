@@ -411,6 +411,7 @@ const MFDPage = ({ mode }) => {
     const [activeProject, setActiveProject] = useState(null);
     const [categoryFilter, setCategoryFilter] = useState("ALL");
     const [stackFilter, setStackFilter] = useState("ALL");
+    const [activeReport, setActiveReport] = useState(data.acars[0]);
 
     // Get unique categories and stacks for filters
     const categories = ["ALL", ...new Set(data.system.projects.map(p => p.cat))];
@@ -428,6 +429,7 @@ const MFDPage = ({ mode }) => {
         setActiveProject(null);
         setCategoryFilter("ALL");
         setStackFilter("ALL");
+        setActiveReport(data.acars[0]);
     }, [mode]);
 
     if (mode === "EXEC") {
@@ -672,7 +674,7 @@ const MFDPage = ({ mode }) => {
     }
 
     if (mode === "ACARS") {
-        const [activeReport, setActiveReport] = useState(data.acars[0]);
+
 
         return (
             <div className="h-full flex flex-col p-4 md:p-6 overflow-hidden">
