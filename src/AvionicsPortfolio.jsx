@@ -7,7 +7,8 @@ import {
     Play,
     ArrowLeft,
     Filter,
-    ExternalLink
+    ExternalLink,
+    FileText
 } from "lucide-react";
 
 /* =========================
@@ -35,49 +36,38 @@ const data = {
             { id: "WIN-02", text: "REAL-TIME PROD MONITORING", sub: "GE AEROSPACE / TABLEAU" }
         ]
     },
-    report: {
-        posts: [
-            {
-                id: "RPT-001",
-                title: "AVIATION ANALYTICS 101",
-                date: "OCT 2025",
-                snippet: "Why predictive maintenance is the holy grail of airline operations cost reduction.",
-                content: `
-                    Predictive maintenance (PdM) represents the shift from "fail and fix" to "predict and prevent". 
-                    In aviation, an AOG (Aircraft on Ground) situation can cost upwards of $10,000 per hour. 
-                    
-                    By leveraging sensor data from high-bypass turbofan engines, we can build ML models (XGBoost/LSTM) 
-                    to predict component degradation before it hits a critical failure threshold.
-                    
-                    The key challenges involved are:
-                    1. Data Volume: Terabytes of sensor telemetry per flight.
-                    2. Noise: High vibration environments create noisy signal data.
-                    3. Imbalance: Actual failures are rare events compared to normal operations.
-                    
-                    Solving these unlocks millions in operational savings and improves safety margins significantly.
-                `
-            },
-            {
-                id: "RPT-002",
-                title: "GEN-AI IN COCKPIT?",
-                date: "DEC 2025",
-                snippet: "Exploring the feasibility of LLMs as co-pilots adjacent to standard EFB tools.",
-                content: `
-                    Large Language Models (LLMs) have shown reasoning capabilities that rival human experts in specific domains.
-                    Could an LLM serve as a "third pilot" in the cockpit?
-                    
-                    Electronic Flight Bags (EFBs) currently serve static data (manuals, charts). 
-                    An LLM-integrated EFB could answer complex queries like:
-                    "What are the diversion options given current fuel and wind conditions considering a hydraulic failure?"
-                    
-                    However, the hallucination problem remains a critical blocker. 
-                    In safety-critical avionics (DO-178C standards), non-deterministic outputs are a no-go.
-                    The future likely lies in RAG (Retrieval-Augmented Generation) systems grounded in verified flight manuals, 
-                    not open-ended generation.
-                `
-            }
-        ]
-    },
+    acars: [
+        {
+            id: "RPT-001",
+            title: "PREDICTIVE MAINTENANCE: BEYOND THE BUZZWORD",
+            date: "14-OCT-2025",
+            tag: "MRO ANALYTICS",
+            priority: "HIGH",
+            content: `Predictive maintenance (PdM) is revolutionizing the MRO industry, moving from scheduled checks to condition-based interventions. By leveraging sensor telemetry from modern turbofans (like the GEnx-1B), we can identify thermal distress signals up to 200 cycles before failure.
+
+The key challenge isn't data volume—it's noise. A vibration spike might be a sensor glitch or a bearing failure. Using XGBoost classifiers trained on 'hard' failure data allows us to distinguish between signal and noise with 94% accuracy. The future of MRO lies not just in predicting failure, but in optimizing the supply chain to have the spare part ready exactly when the prediction model says it's needed.`
+        },
+        {
+            id: "RPT-002",
+            title: "INVENTORY DILUTION IN POST-COVID MARKETS",
+            date: "02-NOV-2025",
+            tag: "REVENUE MGMT",
+            priority: "MED",
+            content: `The post-COVID recovery curve has introduced significant volatility in cargo load factors. Traditional forecasting models (ARIMA) failed to account for supply chain shocks.
+
+By implementing LSTM networks on booking data, we observed a 15% reduction in inventory spoilage. The key is analyzing 'booking velocity'—the rate at which cargo space fills up 72 hours prior to departure.`
+        },
+        {
+            id: "RPT-003",
+            title: "THE HIDDEN COST OF TAXI TIMES",
+            date: "28-DEC-2025",
+            tag: "FLIGHT OPS",
+            priority: "LOW",
+            content: `Fuel burn during taxi operations accounts for 4-6% of total trip fuel. Analysis of surface movement radar data reveals that 30% of hold times are purely scheduling inefficiencies.
+
+Optimizing pushback times using a genetic algorithm scheduler can save an estimated $2M annually per major hub.`
+        }
+    ],
     system: {
         skills: ["PYTHON", "SQL", "TABLEAU", "AWS/GCP", "GEN-AI", "SCIKIT"],
         exp: [
@@ -440,8 +430,6 @@ const MFDPage = ({ mode }) => {
         setStackFilter("ALL");
     }, [mode]);
 
-
-
     if (mode === "EXEC") {
         return (
             <div className="p-6 overflow-y-auto h-full">
@@ -683,57 +671,92 @@ const MFDPage = ({ mode }) => {
         );
     }
 
-    if (mode === "REPORT") {
-        const [activeReport, setActiveReport] = useState(null);
+    if (mode === "ACARS") {
+        const [activeReport, setActiveReport] = useState(data.acars[0]);
 
         return (
-            <div className="p-6 h-full flex flex-col items-center">
-                {!activeReport ? (
-                    <div className="w-full max-w-4xl">
-                        <h2 className="text-3xl font-bold tracking-widest mb-8 text-white border-b border-gray-800 pb-4">
-                            <span className="text-cyan-500">MISSION REPORTS</span>
-                            <span className="text-gray-600 ml-3 text-lg">/ CLASSIFIED LOGS</span>
-                        </h2>
+            <div className="h-full flex flex-col p-4 md:p-6 overflow-hidden">
+                <div className="flex justify-between items-end mb-6 border-b border-gray-800 pb-2">
+                    <h2 className="text-3xl font-bold tracking-widest text-amber-500">
+                        OPERATIONAL REPORTS <span className="text-gray-500 text-lg ml-2 text-white">/ ACARS LOG</span>
+                    </h2>
+                    <div className="text-cyan-600 font-mono text-sm">PG 1/1</div>
+                </div>
 
-                        <div className="grid gap-4">
-                            {data.report.posts.map(post => (
+                <div className="flex-1 grid grid-cols-1 lg:grid-cols-12 gap-6 overflow-hidden">
+                    {/* LEFT PANEL: LIST */}
+                    <div className="lg:col-span-4 flex flex-col overflow-hidden border-r border-gray-800 pr-4">
+                        <div className="flex items-center gap-2 mb-4 text-green-500 font-bold tracking-widest text-xs uppercase">
+                            <FileText size={14} /> Incoming Messages
+                        </div>
+                        <div className="flex-1 overflow-y-auto space-y-2">
+                            {data.acars.map(rep => (
                                 <div
-                                    key={post.id}
-                                    onClick={() => setActiveReport(post)}
-                                    className="bg-gray-900/40 border border-gray-800 p-6 cursor-pointer hover:border-cyan-500 hover:bg-gray-900/60 transition-all group relative overflow-hidden"
+                                    key={rep.id}
+                                    onClick={() => setActiveReport(rep)}
+                                    className={`
+                                        p-4 border-l-2 cursor-pointer transition-all group relative
+                                        ${activeReport.id === rep.id
+                                            ? "bg-gray-900 border-amber-500"
+                                            : "border-gray-800 hover:bg-gray-900/50 hover:border-cyan-500"
+                                        }
+                                    `}
                                 >
-                                    <div className="absolute top-0 right-0 p-2 opacity-50 font-mono text-xs text-gray-600">{post.id}</div>
-                                    <div className="flex justify-between items-end mb-2">
-                                        <h3 className="text-xl font-bold text-gray-200 group-hover:text-cyan-400 transition-colors uppercase tracking-wider">{post.title}</h3>
-                                        <span className="font-mono text-xs text-cyan-700">{post.date}</span>
+                                    <div className="flex justify-between items-start mb-1">
+                                        <span className={`text-[10px] font-mono ${activeReport.id === rep.id ? "text-amber-500" : "text-gray-500"}`}>{rep.id}</span>
+                                        <span className="text-[10px] text-gray-600 font-mono">{rep.date}</span>
                                     </div>
-                                    <p className="text-gray-500 text-sm font-mono leading-relaxed max-w-2xl">{post.snippet}</p>
+                                    <div className={`font-bold text-xs uppercase leading-tight mb-2 ${activeReport.id === rep.id ? "text-white" : "text-gray-400 group-hover:text-gray-200"}`}>
+                                        {rep.title}
+                                    </div>
+                                    <div className="text-[9px] text-cyan-600 font-bold uppercase tracking-wider">{rep.tag}</div>
                                 </div>
                             ))}
                         </div>
                     </div>
-                ) : (
-                    <div className="w-full h-full flex flex-col max-w-3xl relative">
-                        <div className="mb-6 border-b border-gray-800 pb-4 flex justify-between items-center bg-black/90 sticky top-0 py-4 z-10">
-                            <div>
-                                <h1 className="text-2xl font-bold text-white tracking-widest uppercase mb-1">{activeReport.title}</h1>
-                                <div className="text-xs font-mono text-cyan-600">LOG DATE: {activeReport.date} // ID: {activeReport.id}</div>
-                            </div>
-                            <button
-                                onClick={() => setActiveReport(null)}
-                                className="flex items-center gap-2 bg-gray-900 text-gray-400 px-4 py-2 text-xs font-bold uppercase tracking-wider hover:bg-gray-800 hover:text-white transition-colors border border-gray-800"
-                            >
-                                <ArrowLeft size={12} /> CLOSE LOG
-                            </button>
-                        </div>
 
-                        <div className="flex-1 overflow-y-auto pr-4 text-justify">
-                            <div className="prose prose-invert prose-p:font-mono prose-p:text-sm prose-p:text-gray-400 prose-headings:font-bold prose-headings:tracking-widest max-w-none pb-20 whitespace-pre-line">
-                                {activeReport.content}
+                    {/* RIGHT PANEL: CONTENT */}
+                    <div className="lg:col-span-8 flex flex-col overflow-hidden bg-black border border-gray-800 p-6 relative">
+                        {/* CRT Scanline effect */}
+                        <div className="absolute inset-0 pointer-events-none bg-[linear-gradient(rgba(18,16,16,0)_50%,rgba(0,0,0,0.1)_50%),linear-gradient(90deg,rgba(255,0,0,0.06),rgba(0,255,0,0.02),rgba(0,0,255,0.06))] bg-[length:100%_2px,3px_100%] z-20 opacity-20"></div>
+
+                        {activeReport ? (
+                            <div className="h-full flex flex-col relative z-10">
+                                <div className="flex justify-between items-start border-b border-gray-800 pb-4 mb-6">
+                                    <h1 className="text-xl md:text-2xl font-bold text-white tracking-widest uppercase max-w-2xl leading-relaxed">
+                                        {activeReport.title}
+                                    </h1>
+                                    <div className="text-right">
+                                        <div className="text-[10px] text-amber-500 font-bold tracking-widest uppercase mb-1">PRIORITY: {activeReport.priority}</div>
+                                        <div className="text-[10px] text-gray-600 font-mono">{activeReport.date}</div>
+                                    </div>
+                                </div>
+
+                                <div className="flex gap-2 mb-8">
+                                    <span className="bg-cyan-900/30 text-cyan-400 border border-cyan-800/50 px-2 py-1 text-[10px] font-mono uppercase tracking-wider">
+                                        {activeReport.tag}
+                                    </span>
+                                    <span className="bg-gray-900 text-gray-500 border border-gray-800 px-2 py-1 text-[10px] font-mono uppercase tracking-wider">
+                                        ID: {activeReport.id}
+                                    </span>
+                                </div>
+
+                                <div className="flex-1 overflow-y-auto pr-4">
+                                    <p className="font-mono text-sm text-gray-300 leading-loose whitespace-pre-wrap">
+                                        {activeReport.content}
+                                    </p>
+                                    <div className="mt-12 text-center text-[10px] text-gray-600 font-mono tracking-widest uppercase">
+                                        -- END OF TRANSMISSION --
+                                    </div>
+                                </div>
                             </div>
-                        </div>
+                        ) : (
+                            <div className="flex items-center justify-center h-full text-gray-600 font-mono text-xs tracking-widest uppercase">
+                                Awaiting Selection...
+                            </div>
+                        )}
                     </div>
-                )}
+                </div>
             </div>
         );
     }
@@ -747,7 +770,7 @@ const MFDPage = ({ mode }) => {
 
 const NavPanel = ({ mode, setMode }) => (
     <div className="bg-black border-t border-gray-800 p-2 flex justify-center gap-2">
-        {["EXEC", "SYSTEM", "REPORT", "COMM"].map(m => (
+        {["EXEC", "SYSTEM", "ACARS", "COMM"].map(m => (
             <button
                 key={m}
                 onClick={() => setMode(m)}
