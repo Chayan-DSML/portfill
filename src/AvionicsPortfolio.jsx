@@ -31,69 +31,246 @@ const data = {
         ],
         wins: [
             { id: "WIN-01", text: "BUILT AIRLINE REC ENGINE", sub: "GEN-AI / TENSORFLOW" },
+            { id: "WIN-01", text: "BUILT AIRLINE REC ENG", sub: "GEN-AI / TENSORFLOW" },
             { id: "WIN-02", text: "REAL-TIME PROD MONITORING", sub: "GE AEROSPACE / TABLEAU" }
         ]
     },
     system: {
         skills: ["PYTHON", "SQL", "TABLEAU", "AWS/GCP", "GEN-AI", "SCIKIT"],
         exp: [
+            { role: "OPS ANALYST", org: "ADECCO (AMAZON)", time: "AUG23-FEB24", stat: "COMPLETED", color: "text-green-500" },
             { role: "DATA SCI INT", org: "BRITISH AIRWAYS", time: "JUN25-AUG25", stat: "VIRTUAL", color: "text-cyan-400" },
             { role: "DATA ENG INT", org: "GE AEROSPACE", time: "AUG23-OCT23", stat: "VIRTUAL", color: "text-cyan-400" }
         ],
         projects: [
+            // 1. MAINTENANCE
+            {
+                id: "MNT-01",
+                name: "ENGINE PDM & RUL EST",
+                cat: "MAINTENANCE",
+                stack: "ML/PYTHON",
+                desc: "Developed a predictive maintenance system to analyze sensor telemetry from turbofan engines. Predicted Remaining Useful Life (RUL) using XGBoost/Random Forest to prevent in-service failures and optimize schedules.",
+                video: "video_placeholder",
+                tech: ["Python", "XGBoost", "Scikit-learn", "Time-Series", "Pandas"],
+                demo: "N/A"
+            },
+            {
+                id: "MNT-02",
+                name: "AEROSPACE DATA ENG",
+                cat: "MAINTENANCE",
+                stack: "SQL/TABLEAU",
+                desc: "Optimized data pipelines and visualization tools for real-time tracking of jet engine performance metrics (GEnx-1B, GE9X). Enhanced data literacy and provided unified operational KPIs.",
+                video: "video_placeholder",
+                tech: ["SQL", "Tableau", "Data Engineering", "Performance Tracking"],
+                demo: "N/A"
+            },
+            // 2. LOGISTICS
+            {
+                id: "LOG-01",
+                name: "DRONE NET ROUTE OPT",
+                cat: "LOGISTICS",
+                stack: "PYTHON/SIM",
+                desc: "Designed a routing optimization framework for an autonomous drone delivery network. Minimized energy consumption and latency using Network Optimization Algorithms, reducing delivery time by 55%.",
+                video: "video_placeholder",
+                tech: ["Python", "Operations Research", "Simulation", "Algorithms", "Matplotlib"],
+                demo: "N/A"
+            },
+            {
+                id: "LOG-02",
+                name: "CARGO YIELD & DILUTION",
+                cat: "LOGISTICS",
+                stack: "SQL/POWER BI",
+                desc: "Analyzed cargo booking datasets to tackle Inventory Dilution. Built SQL pipelines and Power BI dashboards to correlate Load Factor vs. Yield, identifying underperforming routes.",
+                video: "video_placeholder",
+                tech: ["SQL", "Power BI", "Yield Analysis", "Revenue Mgmt"],
+                demo: "N/A"
+            },
+            {
+                id: "LOG-03",
+                name: "LOGISTICS DOC ASSIST",
+                cat: "LOGISTICS",
+                stack: "GEN-AI",
+                desc: "Developed an Intelligent Document Processing (IDP) system using LLMs to automate data extraction from unstructured logistics docs (invoices, Airway Bills), reducing processing time by 40%.",
+                video: "video_placeholder",
+                tech: ["Generative AI", "LLMs", "LangChain", "OCR", "Python"],
+                demo: "N/A"
+            },
+            {
+                id: "LOG-04",
+                name: "CARGO NET ROUTE EFF",
+                cat: "LOGISTICS",
+                stack: "ML/PYTHON",
+                desc: "Analyzed historical flight data to optimize cargo routing for UPS Airlines. Feature engineered 500K records to improve route timing accuracy by 20% and reduce fuel burn.",
+                video: "video_placeholder",
+                tech: ["Python", "Scikit-learn", "Predictive Modeling", "Logistics Analytics"],
+                demo: "N/A"
+            },
+            // 3. REVENUE / STRATEGY
+            {
+                id: "REV-01",
+                name: "ANCILLARY CROSS-SELL",
+                cat: "REVENUE",
+                stack: "ML/TENSORFLOW",
+                desc: "Developed a Content-Based Filtering algorithm using TensorFlow to suggest add-ons (hotels, cars) during booking. Projected 15% uplift in ancillary revenue by targeting passenger personas.",
+                video: "video_placeholder",
+                tech: ["Python", "TensorFlow", "Recommender Systems", "A/B Testing", "Flask"],
+                demo: "N/A"
+            },
+            {
+                id: "STR-01",
+                name: "TURKISH AIR STRATEGY",
+                cat: "STRATEGY",
+                stack: "BI/PYTHON",
+                desc: "Deep-dive analysis of financial/operational metrics for Turkish Airlines. Synthesized reports to evaluate market positioning, profitability, and sustainability goals.",
+                video: "video_placeholder",
+                tech: ["Strategic Analysis", "Business Intelligence", "Market Research", "Data Viz"],
+                demo: "N/A"
+            },
+            // 4. CUSTOMER EXPERIENCE
             {
                 id: "CST-01",
                 name: "FEEDBACK INSIGHT ENG",
                 cat: "CUSTOMER EXP",
                 stack: "GEN-AI/NLP",
                 desc: "Leveraged LLMs to analyze thousands of unstructured customer Feedback Forms. Automated summarization and sentiment tagging, reducing analysis time from weeks to hours.",
+                video: "video_placeholder",
                 tech: ["Generative AI", "NLP", "Sentiment Analysis", "Prompt Engineering"],
-                demo: "#"
+                demo: "N/A"
             },
             {
                 id: "CST-02",
                 name: "IFE VOICE ASSISTANT",
                 cat: "CUSTOMER EXP",
                 stack: "GEN-AI/NLU",
-                desc: "Developed a voice-controlled In-Flight Entertainment system prototype allowing passengers to control media and service requests via natural language.",
-                tech: ["Speech-to-Text", "NLU", "Python", "React"],
-                demo: "#"
+                desc: "Designed a conversational AI interface for In-Flight Entertainment. Allowed passengers to find movies via natural language, projected to increase engagement by 25%.",
+                video: "video_placeholder",
+                tech: ["Generative AI", "PySpark", "NLU", "Prompt Engineering"],
+                demo: "N/A"
             },
             {
                 id: "CST-03",
                 name: "CHURN PREDICTION",
                 cat: "CUSTOMER EXP",
                 stack: "ML/PYTHON",
-                desc: "Built a predictive model to identify high-risk churn customers based on usage patterns and support interactions, enabling proactive retention strategies.",
-                tech: ["Scikit-learn", "XGBoost", "Pandas", "AWS SageMaker"],
-                demo: "#"
+                desc: "Developed a classification framework (Random Forest) to identify high-value passengers at risk of churning. Improved prediction accuracy by 12% to aid retention campaigns.",
+                video: "video_placeholder",
+                tech: ["Python", "Pandas", "Scikit-learn", "Classification", "Customer Analytics"],
+                demo: "N/A"
             },
             {
                 id: "CST-04",
                 name: "MEAL RECOMMENDATION",
                 cat: "CUSTOMER EXP",
                 stack: "ML/DJANGO",
-                desc: "Personalized in-flight meal recommendation engine based on passenger dietary preferences and past flight history.",
-                tech: ["Collaborative Filtering", "Django", "PostgreSQL"],
-                demo: "#"
+                desc: "Created a recommendation engine using K-Means and Collaborative Filtering to personalize in-flight meals. Facilitated an estimated 18% increase in satisfaction scores.",
+                video: "video_placeholder",
+                tech: ["Python", "Clustering", "Django", "Scikit-learn", "Personalization"],
+                demo: "N/A"
             },
             {
                 id: "CST-05",
                 name: "A350 PAX SATISFACTION",
                 cat: "CUSTOMER EXP",
                 stack: "SQL/POWER BI",
-                desc: "Comprehensive dashboard analyzing passenger satisfaction metrics specific to the A350 fleet, correlating seat configuration with NPS scores.",
-                tech: ["SQL", "Power BI", "Data Visualization"],
-                demo: "#"
+                desc: "Analyzed passenger sentiment for Air India's new A350 fleet using NLP on reviews. Identified a 20% positive shift in sentiment regarding Cabin Comfort vs legacy fleet.",
+                video: "video_placeholder",
+                tech: ["Python", "SQL", "Power BI", "Sentiment Analysis", "NPS Analysis"],
+                demo: "N/A"
             },
             {
                 id: "CST-06",
                 name: "DEMAND FORECASTING",
                 cat: "CUSTOMER EXP",
                 stack: "TIME-SERIES",
-                desc: "Time-series forecasting model to predict seasonal demand for specific routes, optimizing crew allocation and inventory.",
-                tech: ["ARIMA", "Prophet", "Python"],
-                demo: "#"
+                desc: "Built a Time-Series (ARIMA/Prophet) model to forecast travel demand on key routes. Improved forecast accuracy for better inventory management and dynamic pricing.",
+                video: "video_placeholder",
+                tech: ["Time-Series", "ARIMA", "Python", "Scikit-learn", "Data Viz"],
+                demo: "N/A"
+            },
+            // 5. FLIGHT OPS
+            {
+                id: "OPS-01",
+                name: "STAR AIR OPS ANALYSIS",
+                cat: "FLIGHT OPS",
+                stack: "PYTHON/EDA",
+                desc: "Analyzed flight schedules for a regional carrier to maximize fleet efficiency. Identified high-demand routes for frequency increases using EDA on turnaround times.",
+                video: "video_placeholder",
+                tech: ["Python", "Operational Analytics", "Fleet Planning", "Pandas"],
+                demo: "N/A"
+            },
+            {
+                id: "OPS-02",
+                name: "DELAY FORECAST IROPS",
+                cat: "FLIGHT OPS",
+                stack: "SPARK/ML",
+                desc: "Built a system to predict flight delays using weather/ops data via PySpark. Triggered automated rebooking workflows, reducing manual time by 12%.",
+                video: "video_placeholder",
+                tech: ["PySpark", "Predictive Modeling", "Flask", "Automation"],
+                demo: "N/A"
+            },
+            {
+                id: "OPS-03",
+                name: "RYANAIR EFFICIENCY",
+                cat: "FLIGHT OPS",
+                stack: "SQL/POWER BI",
+                desc: "Examined historical flight data to find correlations between strict schedules and delays. Pinpointed seasonal routes where tight turnarounds caused cascading delays.",
+                video: "video_placeholder",
+                tech: ["Python", "SQL", "Power BI", "Operational Analytics"],
+                demo: "N/A"
+            },
+            // 6. AIRPORT OPS
+            {
+                id: "APT-01",
+                name: "COVID TRAFFIC RECOV",
+                cat: "AIRPORT OPS",
+                stack: "SQL/PYTHON",
+                desc: "Conducted analysis of global air traffic recovery post-COVID. Used SQL joins and EDA to visualize recovery curves, aiding airport planners in forecasting surges.",
+                video: "video_placeholder",
+                tech: ["SQL", "EDA", "Python", "Seaborn", "Data Cleaning"],
+                demo: "N/A"
+            },
+            {
+                id: "APT-02",
+                name: "RETAIL REV OPTIMIZER",
+                cat: "AIRPORT OPS",
+                stack: "ML/CLUSTERING",
+                desc: "Analyzed passenger dwell time vs. spending. Used clustering to identify that passengers arriving >2hrs early spend more, suggesting targeted digital coupon strategies.",
+                video: "video_placeholder",
+                tech: ["Python", "Clustering", "Scikit-learn", "Optimization"],
+                demo: "N/A"
+            },
+            // 7. SIMULATORS
+            {
+                id: "SIM-01",
+                name: "AIRLINE REV SIM",
+                cat: "SIMULATORS",
+                stack: "PYTHON/SIM",
+                desc: "Developed a Monte Carlo Simulation environment to model various passenger booking scenarios and their impact on Inventory Dilution. Allowed Revenue Management to simulate pricing strategies before live implementation.",
+                video: "video_placeholder",
+                tech: ["Simulation", "Python", "Revenue Management", "Statistical Modeling", "Yield Analysis"],
+                demo: "N/A"
+            },
+            // 8. CREW MANAGEMENT
+            {
+                id: "CRW-01",
+                name: "CREW ROSTER OPT",
+                cat: "CREW MANAGEMENT",
+                stack: "SQL/POWER BI",
+                desc: "Examined the impact of strict turnaround times on crew fatigue and schedule adherence. Analyzed historical roster data against flight delays to recommend schedule buffers, improving utilization and reducing risks.",
+                video: "video_placeholder",
+                tech: ["CRM Analytics", "SQL", "Schedule Optimization", "Power BI"],
+                demo: "N/A"
+            },
+            // 9. CVR/FDR
+            {
+                id: "FDR-01",
+                name: "REGIONAL FDR ANALYSIS",
+                cat: "CVR/FDR",
+                stack: "PYTHON/PANDAS",
+                desc: "Analyzed Flight Data Recorder (FDR) parameters and aircraft system alert signals to identify operational anomalies in a regional fleet (Star Air). Correlated specific alert patterns with 'hard landings' and 'unstable approaches' for safety feedback.",
+                video: "video_placeholder",
+                tech: ["FDR Data Analysis", "Anomaly Detection", "Python", "Operational Safety", "Pandas"],
+                demo: "N/A"
             }
         ]
     },
