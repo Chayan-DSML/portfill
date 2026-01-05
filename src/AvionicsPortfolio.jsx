@@ -342,11 +342,38 @@ const AvionicsHeader = () => (
 const MFDPage = ({ mode }) => {
     // State for Project Database in SYSTEM mode
     const [activeProject, setActiveProject] = useState(null);
+    const [categoryFilter, setCategoryFilter] = useState("ALL");
+    const [stackFilter, setStackFilter] = useState("ALL");
 
-    // Reset project view when mode changes
+    // Get unique categories and stacks for filters
+    const categories = ["ALL", ...new Set(data.system.projects.map(p => p.cat))];
+    const techStacks = ["ALL", ...new Set(data.system.projects.map(p => p.stack ? p.stack.split('/')[0] : "OTHER"))];
+
+    // Filter projects based on selection
+    const filteredProjects = data.system.projects.filter(p => {
+        const catMatch = categoryFilter === "ALL" || p.cat === categoryFilter;
+        const stackMatch = stackFilter === "ALL" || (p.stack && p.stack.includes(stackFilter));
+        return catMatch && stackMatch;
+    });
+
+    // Reset view when mode changes
     useEffect(() => {
         setActiveProject(null);
+        setCategoryFilter("ALL");
+        setStackFilter("ALL");
     }, [mode]);
+
+    const cycleCategory = () => {
+        const idx = categories.indexOf(categoryFilter);
+        const nextIdx = (idx + 1) % categories.length;
+        setCategoryFilter(categories[nextIdx]);
+    };
+
+    const cycleStack = () => {
+        const idx = techStacks.indexOf(stackFilter);
+        const nextIdx = (idx + 1) % techStacks.length;
+        setStackFilter(techStacks[nextIdx]);
+    };
 
     if (mode === "EXEC") {
         return (
@@ -443,11 +470,17 @@ const MFDPage = ({ mode }) => {
                             <div className="flex gap-2">
                                 {!activeProject && (
                                     <>
-                                        <button className="flex items-center gap-1 bg-cyan-900/20 border border-cyan-800/50 text-cyan-400 px-3 py-1 text-[10px] uppercase tracking-wider hover:bg-cyan-900/40">
-                                            <Filter size={10} /> Customer Exp
+                                        <button
+                                            onClick={cycleCategory}
+                                            className="flex items-center gap-2 bg-cyan-900/20 border border-cyan-800/50 text-cyan-400 px-3 py-1 text-[10px] uppercase tracking-wider hover:bg-cyan-900/40 transition-colors min-w-[140px] justify-center"
+                                        >
+                                            <Filter size={10} /> {categoryFilter}
                                         </button>
-                                        <button className="flex items-center gap-1 bg-cyan-900/20 border border-cyan-800/50 text-cyan-400 px-3 py-1 text-[10px] uppercase tracking-wider hover:bg-cyan-900/40">
-                                            All
+                                        <button
+                                            onClick={cycleStack}
+                                            className="flex items-center gap-2 bg-cyan-900/20 border border-cyan-800/50 text-cyan-400 px-3 py-1 text-[10px] uppercase tracking-wider hover:bg-cyan-900/40 transition-colors min-w-[100px] justify-center"
+                                        >
+                                            <Target size={10} /> {stackFilter}
                                         </button>
                                     </>
                                 )}
@@ -466,32 +499,40 @@ const MFDPage = ({ mode }) => {
                         <div className="flex-1 overflow-y-auto md:p-0">
                             {!activeProject ? (
                                 /* LIST VIEW */
-                                <table className="w-full text-left border-collapse">
-                                    <thead className="bg-gray-900/50 text-[10px] text-gray-500 font-bold uppercase tracking-wider sticky top-0">
-                                        <tr>
-                                            <th className="p-4 border-b border-gray-800">ID</th>
-                                            <th className="p-4 border-b border-gray-800">Project Name</th>
-                                            <th className="p-4 border-b border-gray-800">Category</th>
-                                            <th className="p-4 border-b border-gray-800 text-right">Stack</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody className="text-xs font-mono">
-                                        {data.system.projects.map((proj) => (
-                                            <tr
-                                                key={proj.id}
-                                                onClick={() => setActiveProject(proj)}
-                                                className="border-b border-gray-800/50 hover:bg-cyan-900/10 hover:text-cyan-400 cursor-pointer transition-colors group"
-                                            >
-                                                <td className="p-4 text-gray-500 group-hover:text-cyan-600">{proj.id}</td>
-                                                <td className="p-4 font-bold max-w-[150px] truncate">{proj.name}</td>
-                                                <td className="p-4 text-gray-400 uppercase">{proj.cat}</td>
-                                                <td className="p-4 text-right text-gray-400 uppercase group-hover:text-cyan-400">
-                                                    {proj.stack}
-                                                </td>
+                                <div className="h-full overflow-y-auto">
+                                    <table className="w-full text-left border-collapse">
+                                        <thead className="bg-gray-900/50 text-[10px] text-gray-500 font-bold uppercase tracking-wider sticky top-0 backdrop-blur-sm">
+                                            <tr>
+                                                <th className="p-4 border-b border-gray-800">ID</th>
+                                                <th className="p-4 border-b border-gray-800">Project Name</th>
+                                                <th className="p-4 border-b border-gray-800">Category</th>
+                                                <th className="p-4 border-b border-gray-800 text-right">Stack</th>
                                             </tr>
-                                        ))}
-                                    </tbody>
-                                </table>
+                                        </thead>
+                                        <tbody className="text-xs font-mono">
+                                            {filteredProjects.length > 0 ? (
+                                                filteredProjects.map((proj) => (
+                                                    <tr
+                                                        key={proj.id}
+                                                        onClick={() => setActiveProject(proj)}
+                                                        className="border-b border-gray-800/50 hover:bg-cyan-900/10 hover:text-cyan-400 cursor-pointer transition-colors group"
+                                                    >
+                                                        <td className="p-4 text-gray-500 group-hover:text-cyan-600">{proj.id}</td>
+                                                        <td className="p-4 font-bold max-w-[150px] truncate">{proj.name}</td>
+                                                        <td className="p-4 text-gray-400 uppercase">{proj.cat}</td>
+                                                        <td className="p-4 text-right text-gray-400 uppercase group-hover:text-cyan-400">
+                                                            {proj.stack}
+                                                        </td>
+                                                    </tr>
+                                                ))
+                                            ) : (
+                                                <tr>
+                                                    <td colSpan="4" className="p-8 text-center text-gray-500">NO PROJECTS FOUND MATCHING FILTERS</td>
+                                                </tr>
+                                            )}
+                                        </tbody>
+                                    </table>
+                                </div>
                             ) : (
                                 /* DETAIL VIEW */
                                 <div className="p-6 h-full flex flex-col">
