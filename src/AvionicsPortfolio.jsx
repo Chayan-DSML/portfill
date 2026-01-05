@@ -498,40 +498,34 @@ const MFDPage = ({ mode }) => {
                         {/* CONTENT AREA */}
                         <div className="flex-1 overflow-y-auto md:p-0">
                             {!activeProject ? (
-                                /* LIST VIEW */
-                                <div className="h-full overflow-y-auto">
-                                    <table className="w-full text-left border-collapse">
-                                        <thead className="bg-gray-900/50 text-[10px] text-gray-500 font-bold uppercase tracking-wider sticky top-0 backdrop-blur-sm">
-                                            <tr>
-                                                <th className="p-4 border-b border-gray-800">ID</th>
-                                                <th className="p-4 border-b border-gray-800">Project Name</th>
-                                                <th className="p-4 border-b border-gray-800">Category</th>
-                                                <th className="p-4 border-b border-gray-800 text-right">Stack</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody className="text-xs font-mono">
-                                            {filteredProjects.length > 0 ? (
-                                                filteredProjects.map((proj) => (
-                                                    <tr
-                                                        key={proj.id}
-                                                        onClick={() => setActiveProject(proj)}
-                                                        className="border-b border-gray-800/50 hover:bg-cyan-900/10 hover:text-cyan-400 cursor-pointer transition-colors group"
-                                                    >
-                                                        <td className="p-4 text-gray-500 group-hover:text-cyan-600">{proj.id}</td>
-                                                        <td className="p-4 font-bold max-w-[150px] truncate">{proj.name}</td>
-                                                        <td className="p-4 text-gray-400 uppercase">{proj.cat}</td>
-                                                        <td className="p-4 text-right text-gray-400 uppercase group-hover:text-cyan-400">
-                                                            {proj.stack}
-                                                        </td>
-                                                    </tr>
-                                                ))
-                                            ) : (
-                                                <tr>
-                                                    <td colSpan="4" className="p-8 text-center text-gray-500">NO PROJECTS FOUND MATCHING FILTERS</td>
-                                                </tr>
-                                            )}
-                                        </tbody>
-                                    </table>
+                                /* TILE VIEW (GRID) */
+                                <div className="p-4 overflow-y-auto h-full grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-3 content-start">
+                                    {filteredProjects.length > 0 ? (
+                                        filteredProjects.map((proj) => (
+                                            <div
+                                                key={proj.id}
+                                                onClick={() => setActiveProject(proj)}
+                                                className="bg-gray-900/30 border border-gray-800 hover:border-cyan-500 p-3 flex flex-col justify-between h-[120px] transition-all cursor-pointer group hover:bg-gray-900/60"
+                                            >
+                                                <div className="flex justify-between items-start">
+                                                    <span className="text-[10px] text-cyan-600 font-mono group-hover:text-cyan-400">{proj.id}</span>
+                                                    <div className="w-1.5 h-1.5 bg-gray-800 rounded-full group-hover:bg-green-500 transition-colors"></div>
+                                                </div>
+
+                                                <div className="font-bold text-xs text-gray-300 leading-tight group-hover:text-white uppercase line-clamp-2">
+                                                    {proj.name}
+                                                </div>
+
+                                                <div className="text-[9px] text-gray-500 font-mono border-t border-gray-800 pt-2 mt-1 truncate group-hover:text-gray-400 group-hover:border-cyan-900">
+                                                    {proj.stack}
+                                                </div>
+                                            </div>
+                                        ))
+                                    ) : (
+                                        <div className="col-span-full h-40 flex items-center justify-center text-gray-500 text-sm">
+                                            NO PROJECTS FOUND MATCHING FILTERS
+                                        </div>
+                                    )}
                                 </div>
                             ) : (
                                 /* DETAIL VIEW */
