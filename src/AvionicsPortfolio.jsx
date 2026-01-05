@@ -20,7 +20,7 @@ const data = {
         name: "CHAYAN AGARWAL",
         role: "DATA SCIENTIST",
         base: "BLR",
-        sqawk: "2025",
+        sqawk: "2026",
         freq: "124.85"
     },
     executive: {
